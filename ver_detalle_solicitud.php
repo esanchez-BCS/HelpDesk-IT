@@ -249,5 +249,33 @@ $res_botones = mysqli_query($conexion, $sql_botones);
     </div>
 </div>
 
+<div class="info-box" style="margin-top: 30px; border-left: 5px solid #4318ff;">
+    <h4><i class="fa fa-history"></i> Historial de Movimientos (Bitácora)</h4>
+    <div style="max-height: 300px; overflow-y: auto;">
+        <?php
+        $res_logs = mysqli_query($conexion, "SELECT * FROM solicitudes_pos_logs WHERE solicitud_id = $id_solicitud ORDER BY fecha_movimiento DESC");
+        if (mysqli_num_rows($res_logs) > 0): ?>
+            <table style="width: 100%; font-size: 13px;">
+                <tr style="color: #888; border-bottom: 1px solid #eee;">
+                    <th style="padding: 10px;">Fecha/Hora</th>
+                    <th>Usuario</th>
+                    <th>Acción</th>
+                    <th>Detalles</th>
+                </tr>
+                <?php while($l = mysqli_fetch_assoc($res_logs)): ?>
+                    <tr style="border-bottom: 1px solid #f9f9f9;">
+                        <td style="padding: 10px;"><?php echo date('d/m/Y h:i A', strtotime($l['fecha_movimiento'])); ?></td>
+                        <td><b><?php echo $l['usuario_nombre']; ?></b></td>
+                        <td><span class="status-pill status-process"><?php echo $l['accion']; ?></span></td>
+                        <td><?php echo $l['detalles']; ?></td>
+                    </tr>
+                <?php endwhile; ?>
+            </table>
+        <?php else: ?>
+            <p style="color: #999; text-align: center; padding: 20px;">No hay movimientos registrados para esta solicitud aún.</p>
+        <?php endif; ?>
+    </div>
+</div>
+
 </body>
 </html>
